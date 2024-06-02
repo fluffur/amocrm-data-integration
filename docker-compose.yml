@@ -1,0 +1,17 @@
+services:
+  webserver:
+    restart: unless-stopped
+    image: nginx:1.25.5
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+      - ./:/var/www
+  app:
+    restart: unless-stopped
+    build:
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+
