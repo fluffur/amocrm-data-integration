@@ -1,5 +1,6 @@
 services:
   webserver:
+    container_name: integration-web
     restart: unless-stopped
     image: nginx:1.25.5
     ports:
@@ -8,9 +9,12 @@ services:
       - ./docker/nginx:/etc/nginx/conf.d
       - ./:/var/www
   app:
+    container_name: integration-app
     restart: unless-stopped
     build:
       dockerfile: docker/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     working_dir: /var/www
     volumes:
       - ./:/var/www
