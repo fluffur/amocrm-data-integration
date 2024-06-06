@@ -2,249 +2,95 @@
 
 declare(strict_types=1);
 
-loadEnv(dirname(__DIR__));
+require_once '../configs/config.php';
 
-$uri = validatePostRequestWithField('linkData');
+$data = [
+    '{"type":"call_result","lead":{"id":50533092696,"name":"ООО Ромашка","comment":"","post":null,"city":"Москва","business":"","homepage":null,"emails":[],"inn":"7736265457","kpp":null,"parent_lead_id":null,"tags":[],"address":null,"external_id":null,"custom_fields":{"FIELD_50000005819":null},"created_at":"2024-05-24T01:20:22.000+03:00","updated_at":"2024-05-24T02:00:18.000+03:00","deleted_at":null,"lead_phones":[],"phones":"+79999999999","responsible_id":120408,"search_data":"42516|ООО РОМАШКА|+79999999999|МОСКВА|Г. МОСКВА И МОСКОВСКАЯ ОБЛАСТЬ|7736265457|ВАСИЛЬКОВ ВАСИЛИЙ ВАСИЛЬЕВИЧ|+79999999999|89999999999|МОСКВА|Г. МОСКВА И МОСКОВСКАЯ ОБЛАСТЬ|+7 (999) 999-99-99","last_call_date":null},"contact":{"id":50533092697,"name":"Васильков Василий Васильевич","comment":"","post":"","city":"Москва","business":null,"homepage":"","emails":[],"inn":null,"kpp":null,"parent_lead_id":50533092696,"tags":[],"address":null,"external_id":null,"custom_fields":{"FIELD_50000004608":[50000000736,50000000737],"FIELD_50000004612":50000000790,"FIELD_50000008896":null},"created_at":"2024-05-24T01:20:22.000+03:00","updated_at":"2024-05-24T02:00:20.955+03:00","deleted_at":null,"lead_phones":["+7 (999) 999-99-99"],"phones":"+79999999999","responsible_id":120408,"search_data":null,"last_call_date":null},"call":{"id":50787206122,"phone":"+79999999999","source":"+79250550694","direction":"out","params":{},"lead_id":50533092697,"organization_id":50533092696,"user_id":120408,"connected_at":null,"ended_at":"2024-05-24T02:00:18.000+03:00","reason":"","duration":0,"scenario_id":50000006506,"result_id":50000100458,"incoming_phone":null,"external_access_id":null,"recording_url":null,"call_type":"outgoing","region":"г. Москва и Московская область","local_time":"02:00","amocrm_associations":[],"amocrm_entity_id":null,"amocrm_entity_type":null,"call_project_id":null,"call_project_title":null,"scenario_result_group_id":50000009871,"scenario_result_group_title":"Успешные"},"call_result":{"result_id":50000100458,"result_name":"Лид","comment":"Тест 4"}}',
+    '{"type":"call_result","lead":{"id":726962697,"name":"Иван Иванович","comment":null,"post":null,"city":null,"business":null,"homepage":"","emails":[],"inn":null,"kpp":null,"parent_lead_id":null,"tags":[],"address":null,"external_id":null,"custom_fields":{"FIELD_4271":"Utm_term","FIELD_4272":"Utm_source","FIELD_4273":"Utm_capmaign","FIELD_4274":"Utm_medium","FIELD_4275":"Utm_content","FIELD_4276":"Gclid"},"created_at":"2024-05-17T10:51:55.447+03:00","updated_at":"2024-05-23T19:34:02.000+03:00","deleted_at":null,"lead_phones":["+7 (999) 999-99-99"],"phones":"+79999999999","responsible_id":176085,"search_data":"50652|+79999999999|+79999999999|89999999999|+7 (999) 999-99-99","last_call_date":"2024-05-23T19:34:02.000+03:00"},"contact":null,"call":{"id":954536895,"phone":"+79999999999","source":"+79265329935","direction":"out","params":{"external_access_id":"c7f0b756-40f6-491b-b994-d4705684c2cd"},"lead_id":726962697,"organization_id":726962697,"user_id":173946,"connected_at":null,"ended_at":"2024-05-23T19:34:03.000+03:00","reason":null,"duration":0,"scenario_id":71896,"result_id":611305,"incoming_phone":null,"external_access_id":"c7f0b756-40f6-491b-b994-d4705684c2cd","recording_url":null,"call_type":"outgoing","region":"г. Москва и Московская область","local_time":"19:34","amocrm_associations":[{"amocrm_entity_id":14401575,"amocrm_entity_type":"lead","api_endpoint":"https://infowantresultserviceru.amocrm.ru"},{"amocrm_entity_id":19169059,"amocrm_entity_type":"contact","api_endpoint":"https://infowantresultserviceru.amocrm.ru"}],"amocrm_entity_id":14401575,"amocrm_entity_type":"lead","call_project_id":null,"call_project_title":null,"scenario_result_group_id":43338,"scenario_result_group_title":"Успешные"},"call_result":{"result_id":611305,"result_name":"Лид","comment":"Тест Тест"}}',
+    '{"type":"call_result","lead":{"id":50430648585,"name":"Денис Петрович","comment":null,"post":"","city":"","business":null,"homepage":"","emails":[],"inn":null,"kpp":null,"parent_lead_id":null,"tags":[],"address":"","external_id":"908167403","custom_fields":{"":null,"FIELD_50000007592":null,"FIELD_50000007593":[50000001811],"FIELD_50000007594":null,"FIELD_50000007635":null,"FIELD_50000007636":50000001826,"FIELD_50000007637":null},"created_at":"2023-12-02T12:17:23.049+03:00","updated_at":"2023-12-21T21:17:54.000+03:00","deleted_at":null,"phones":"+79064408676","responsible_id":182978,"search_data":"51421|ДЕНИС ПЕТРОВИЧ|+79064408676|89064408676|+7 (906) 440-86-76","last_call_date":"2023-12-21T21:17:54.000+03:00"},"contact":null,"call":{"id":50629930452,"phone":"+79064408676","source":"user_64d22fafdf3ee2cc362b30c9","direction":"out","params":{},"lead_id":50430648585,"organization_id":50430648585,"user_id":179916,"connected_at":null,"ended_at":"2023-12-21T21:17:54.000+03:00","reason":"487 Request Cancelled","duration":0,"scenario_id":50000013363,"result_id":50000237106,"incoming_phone":null,"external_access_id":null,"recording_url":null,"call_type":"outgoing","region":"Ставропольский край","local_time":"21:17","amocrm_associations":[],"amocrm_entity_id":null,"amocrm_entity_type":null,"call_project_id":null,"call_project_title":null,"scenario_result_group_id":50000018310,"scenario_result_group_title":"Успешные"},"call_result":{"result_id":50000237106,"result_name":"Лид","comment":"Тест 3"}}'
+];
 
-$dataFilename = 'data_file_get.txt';
-$tokensFilename = 'tokens.txt';
+$complexLeads = [];
 
-$contacts = getDataFromUri($uri . $dataFilename);
+foreach ($data as $jsonData) {
+    $record = json_decode($jsonData, true);
 
-if (isset($_ENV['ACCESS_TOKEN'])) {
-    $authHeaders = getHeadersFromEnv();
+    $lead = $record['lead'];
+    $contact = $record['contact'];
+    $callResult = $record['call_result'];
+
+    // Обязательное условие: наличие контакта в сделке
+    // Все сделки без данных о контакте пропускаются
+    if ($contact === null) {
+        continue;
+    }
+
+    $complexLeads[] = createComplexLeadRequestData($lead, $contact, $callResult);
+}
+
+
+[$response, $code] = sendPostRequest(API_V4_URI . '/leads/complex', $complexLeads, AMOCRM_HEADERS);
+
+
+
+
+if ($code === 200) {
+    echo 'Data successfully sent!';
+} else if ($code === 401) {
+
+    echo 'Invalid API auth credentials.';
 } else {
-    $authHeaders = getHeadersFromTokensUri($uri . $tokensFilename);
+    echo 'Invalid data.';
 }
 
-$subdomain = $_ENV['AMOCRM_SUBDOMAIN'];
 
-sendContactsDataToAmoCRM($contacts, $authHeaders, $subdomain);
-
-exit;
-
-
-function sendPost(string $uri, array $headers = [], array $body = []): array
+function createComplexLeadRequestData(array $lead, array $contact, array $callResult): array
 {
-    $ch = curl_init($uri);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));;
+
+    $contactNames = explode(' ', $contact['name'], 3);
+    $isFioFormat = count($contactNames) === 3;
+    $contactFirstName = $isFioFormat ? $contactNames[1] : $contactNames[0];
+    $contactLastName = $isFioFormat ? $contactNames[0] : $contactNames[1];
+
+    return [
+        'name' => $callResult['result_name'],
+        '_embedded' => [
+            'contacts' => [
+                [
+                    'name' => $contact['name'],
+                    'first_name' => $contactFirstName,
+                    'last_name' => $contactLastName,
+                ],
+            ],
+            'companies' => [
+                [
+                    'name' => $lead['name'],
+                    'custom_fields_values' => [
+                        [
+                            'field_code' => 'PHONE',
+                            'values' => [
+                                [
+                                    'value' => $lead['phones'],
+                                    'enum_code' => 'WORK'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ]
+        ]
+    ];
+}
+
+function sendPostRequest(string $url, array $body, array $headers = []): array
+{
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    return [curl_exec($ch), curl_getinfo($ch)];
-}
-
-function sendGet(string $uri, array $headers = [], bool $safe = true): array
-{
-    $ch = curl_init($uri);
-    if (!$safe) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    }
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => $headers,
-    ]);
-    return [curl_exec($ch), curl_getinfo($ch)];
-}
-
-
-function loadEnv(string $dirname)
-{
-    if (!file_exists($dirname . '/.env')) {
-        throw new Exception('Missing environment file in path: ' . $dirname);
-    }
-
-    $path = $dirname . '/.env';
-
-    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-    foreach ($lines as $line) {
-        if (!str_contains($line, '=') || str_starts_with(trim($line), '#')) {
-            continue;
-        }
-
-        [$key, $value] = explode('=', $line, 2);
-        $key = trim($key);
-        $value = trim($value);
-        if (!array_key_exists($key, $_ENV)) {
-            putenv("$key=$value");
-            $_ENV[$key] = $value;
-        }
-
-    }
-}
-
-function sliceArray(array $elements, int $elementsPerPage): array
-{
-
-    $totalPages = ceil(count($elements) / $elementsPerPage);
-
-    $elementsPaging = [];
-    for ($page = 0; $page < $totalPages; $page++) {
-        $startIndex = $page * $elementsPerPage;
-        $elementsPaging[] = array_slice($elements, $startIndex, $elementsPerPage);
-    }
-    return $elementsPaging;
-}
-
-function getContactFields(): array
-{
-    return [
-        'name',
-        'first_name',
-        'last_name',
-        'responsible_user_id',
-        'created_at',
-        'updated_at',
-        'custom_fields_values',
-        'tags_to_add',
-        '_embedded',
-        'request_id'
-    ];
-}
-
-function structureRawContactsData(string $rawData): array
-{
-    $splitData = explode(PHP_EOL, $rawData);
-    $mappedData = array_map(fn($value) => json_decode($value, true), $splitData);
-    $filteredData = array_filter($mappedData, fn($value) => !is_null($value));
-    return array_values($filteredData);
-}
-
-
-function getHeadersFromEnv(): array
-{
-    return [
-        ...getBaseHeaders(),
-        'Authorization: Bearer ' . $_ENV['ACCESS_TOKEN']
-    ];
-}
-
-function getHeadersFromTokensUri(string $tokensUri): array
-{
-    static $headers;
-
-    if ($headers === null) {
-        [$rawTokens, $info] = sendGet($tokensUri, safe: false);
-        $tokens = json_decode($rawTokens, true);
-        $accessToken = $tokens['access_token'];
-
-        $headers = [
-            ...getBaseHeaders(),
-            'Authorization: Bearer ' . $accessToken,
-        ];
-    }
-
-    return $headers;
-}
-
-function getBaseHeaders(): array
-{
-    return ['Content-Type: application/json'];
-}
-
-function getDataFromUri(string $path): array
-{
-    [$rawData, $info] = sendGet($path, safe: false);
-
-    return structureRawContactsData($rawData);
-
-}
-
-function sendContactsDataToAmoCRM(array $contacts, array $headers, string $subdomain): void
-{
-    $apiUri = "https://$subdomain.amocrm.ru/api/v4/";
-
-    $customFieldsUri = $apiUri . 'contacts/custom_fields';
-
-    $contactsPaging = sliceArray($contacts, 250);
-
-    $availableContactFields = getContactFields();
-
-    foreach ($contactsPaging as $contacts) {
-        $processedContacts = [];
-        $customFields = [];
-
-        foreach ($contacts as $contact) {
-            $processedContact = [];
-            $customFieldsValues = [];
-            foreach ($contact as $key => $value) {
-                if ($value === null) {
-                    continue;
-                }
-                if (!in_array($key, $availableContactFields)) {
-
-                    $type = getTypeOfField($key, $value);
-                    $customFields[] = [
-                        "name" => $key,
-                        "type" => $type,
-                        "code" => $key,
-                        "is_required" => false,
-                        "enums" => []
-
-                    ];
-                    var_dump($key);
-                    $customFieldsValues[] = [
-                        'field_name' => $key,
-                        'field_type' => $type,
-                        'field_code' => $key,
-                        'values' => $value
-                    ];
-                } else {
-                    $processedContact[$key] = $value;
-                }
-            }
-            if (!empty($customFieldsValues)) {
-                $processedContact['custom_fields_values'] = $customFieldsValues;
-            }
-            $processedContacts[] = $processedContact;
-        }
-        var_dump(sendPost($customFieldsUri, $headers, $customFields));
-        var_dump(sendPost($apiUri . 'contacts', $headers, $processedContacts));
-
-    }
-}
-
-function getContacts(array $headers, string $subdomain): array
-{
-    $contactsUri = "https://$subdomain.amocrm.ru/api/v4/contacts";
-
-    return sendGet($contactsUri, $headers);
-}
-
-
-function validatePostRequestWithField(string $field): mixed
-{
-
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        throw new Exception('Invalid request method');
-    }
-
-    if (!isset($_POST[$field])) {
-        throw new Exception('Field linkData is required');
-    }
-
-    return $_POST[$field];
-}
-
-function getTypeOfField(string $key, mixed $value)
-{
-    $key = strtolower($key);
-    if ($key === 'date' || $key === 'time') {
-        return 'date';
-    }
-    if ($key === 'site') {
-        return 'url';
-    }
-    $type = gettype($value);
-
-    return match ($type) {
-        "array" => 'select',
-        "double", "integer", => 'numeric',
-        "string" => 'text',
-        "boolean" => 'checkbox',
-        default => die('Unknown type: ' . $type)
-    };
-
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    $response = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return [$response, $code];
 }

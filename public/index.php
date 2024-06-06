@@ -10,8 +10,8 @@
 <body>
 <div style="text-align: center;">
     <form method="POST" action="send.php">
-        <label for="linkData">example: https://response.trainity.online/</label><br><br>
-        <input type="text" name="linkData" id="linkData" required placeholder="your`s link for take Data"><br><br>
+        <label for="linkData">Send <a href="https://docs.google.com/document/d/1rbLZahXTXfX3tgXaXtRFKIMglcO9LzqOk4xtY_Swzbs/edit">this data</a></label><br><br>
+
         <input type="submit" value="Send Data">
     </form>
 </div>
