@@ -19,12 +19,12 @@ function main(): void
 function prepareData(): array
 {
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['linkData'])) {
-        return json_decode($_POST['linkData'], true);
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['linkData'])) {
+        require_once '../data.php';
+        return array_map(fn($value) => json_decode($value, true), getData());
     }
+    return json_decode($_POST['linkData'], true);
 
-    require_once '../data.php';
-    return array_map(fn($value) => json_decode($value, true), getData());
 }
 
 
