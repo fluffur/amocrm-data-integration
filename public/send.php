@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 require_once '../configs/config.php';
 
-$data = prepareData();
-
-$complexLeads = createComplexLeadsArray($data);
-
-[$response, $code] = sendPostRequest(API_V4_URI . '/leads/complex', $complexLeads, AMOCRM_HEADERS);
-
-echo viewOperationResult($code);
-
+main();
 exit;
+
+
+function main(): void
+{
+    $data = prepareData();
+
+    $complexLeads = createComplexLeadsArray($data);
+
+    [, $code] = sendPostRequest(API_V4_URI . '/leads/complex', $complexLeads, AMOCRM_HEADERS);
+
+    echo viewOperationResult($code);
+
+}
 
 function prepareData(): array
 {
