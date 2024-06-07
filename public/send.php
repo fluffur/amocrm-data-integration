@@ -60,19 +60,19 @@ function createComplexLeadRequestData(array $lead, array $contact): array
         'last_name' => $isFioFormat ? $contactNames[0] : $contactNames[1],
     ];
 
-    $company = [
-        'name' => $lead['name'],
-        'custom_fields_values' => [
+    $phone = [
+        'field_code' => 'PHONE',
+        'values' => [
             [
-                'field_code' => 'PHONE',
-                'values' => [
-                    [
-                        'value' => $lead['phones'],
-                        'enum_code' => 'WORK'
-                    ],
-                ],
+                'value' => $lead['phones'],
+                'enum_code' => 'WORK'
             ],
         ],
+    ];
+
+    $company = [
+        'name' => $lead['name'],
+        'custom_fields_values' => [$phone],
     ];
 
 
@@ -88,12 +88,16 @@ function createComplexLeadRequestData(array $lead, array $contact): array
 function sendPostRequest(string $url, array $body, array $headers = []): array
 {
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($body),
+        CURLOPT_HTTPHEADER => $headers,
+    ]);
+
     $response = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
     curl_close($ch);
     return [$response, $code];
 }
