@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 require_once '../configs/config.php';
 
+/**
+ * Главная функция, которая запускает процесс подготовки данных,
+ * создания сложных сделок и отправки POST-запроса с данными сделок.
+ *
+ * @return void
+ */
 function main(): void
 {
     $data = prepareData();
@@ -16,6 +22,14 @@ function main(): void
 
 }
 
+/**
+ * Подготавливает данные для создания сложных сделок.
+ *
+ * Если запрос не является POST или данные отсутствуют в `$_POST['linkData']`,
+ * данные загружаются из файла `../data.php`. В противном случае, данные берутся из POST-запроса.
+ *
+ * @return array Массив данных для создания сложных сделок.
+ */
 function prepareData(): array
 {
 
@@ -37,12 +51,22 @@ function createComplexLeadsArray(array $data): array
 
 }
 
-function createComplexLeadRequestData(array $lead, ?array $contact): array
+/**
+ * Создает данные для сложного запроса добавления сделки.
+ *
+ * Если `contactRecord` не содержит `null`, то используется название сделки для названия **компании** (company.name).
+ * В ином случае, используется название сделки для имени **контакта** (contact.name), а название **компании** остается пустым.
+ *
+ * @param array $leadRecord Массив с данными сделки.
+ * @param array|null $contactRecord Массив с данными контакта или null.
+ * @return array Массив данных для запроса создания сделки.
+ */
+function createComplexLeadRequestData(array $leadRecord, ?array $contactRecord): array
 {
-    $contactFullName = $contact['name'] ?? $lead['name'];
 
+
+    $contactFullName = $contactRecord['name'] ?? $leadRecord['name'];
     $contactNames = array_values(explode(' ', $contactFullName, 3));
-
     $isFioFormat = count($contactNames) === 3;
 
     $contact = [
@@ -51,24 +75,25 @@ function createComplexLeadRequestData(array $lead, ?array $contact): array
         'last_name' => $isFioFormat ? $contactNames[0] : $contactNames[1],
     ];
 
+
     $phone = [
         'field_code' => 'PHONE',
         'values' => [
             [
-                'value' => $lead['phones'],
+                'value' => $leadRecord['phones'],
                 'enum_code' => 'WORK'
             ],
         ],
     ];
 
     $company = [
-        'name' => $lead['name'],
+        'name' => isset($contactRecord) ? $leadRecord['name'] : '',
         'custom_fields_values' => [$phone],
     ];
 
 
     return [
-        'name' => $lead['name'],
+        'name' => $leadRecord['name'],
         '_embedded' => [
             'contacts' => [$contact],
             'companies' => [$company],
@@ -76,6 +101,14 @@ function createComplexLeadRequestData(array $lead, ?array $contact): array
     ];
 }
 
+/**
+ * Отправляет POST-запрос на указанный URL.
+ *
+ * @param string $url URL для отправки запроса.
+ * @param array $body Тело запроса в формате массива.
+ * @param array $headers Заголовки запроса.
+ * @return array Массив, содержащий ответ и код состояния HTTP.
+ */
 function sendPostRequest(string $url, array $body, array $headers = []): array
 {
     $ch = curl_init($url);
@@ -94,6 +127,12 @@ function sendPostRequest(string $url, array $body, array $headers = []): array
 }
 
 
+/**
+ * Возвращает сообщение о результате операции на основе кода состояния HTTP.
+ *
+ * @param int $code Код состояния HTTP.
+ * @return string Сообщение о результате операции.
+ */
 function viewOperationResult(int $code): string
 {
 
