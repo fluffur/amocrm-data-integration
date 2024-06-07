@@ -30,28 +30,23 @@ function prepareData(): array
 
 function createComplexLeadsArray(array $data): array
 {
-
-
-    // Обязательное условие: наличие контакта в сделке
-    // Все сделки без данных о контакте пропускаются
-    $filteredData = array_filter($data, fn($record) => isset($record['lead'], $record['contact']));
-
     return array_map(
         fn($record) => createComplexLeadRequestData($record['lead'], $record['contact']),
-        $filteredData
+        $data
     );
 
 }
 
-function createComplexLeadRequestData(array $lead, array $contact): array
+function createComplexLeadRequestData(array $lead, ?array $contact): array
 {
+    $contactFullName = $contact['name'] ?? $lead['name'];
 
-    $contactNames = array_values(explode(' ', $contact['name'], 3));
+    $contactNames = array_values(explode(' ', $contactFullName, 3));
 
     $isFioFormat = count($contactNames) === 3;
 
     $contact = [
-        'name' => $contact['name'],
+        'name' => $contactFullName,
         'first_name' => $isFioFormat ? $contactNames[1] : $contactNames[0],
         'last_name' => $isFioFormat ? $contactNames[0] : $contactNames[1],
     ];
