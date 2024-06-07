@@ -12,40 +12,69 @@ $complexLeads = createComplexLeadsArray($data);
 
 echo viewOperationResult($code);
 
-function createComplexLeadRequestData(array $lead, array $contact, array $callResult): array
+exit;
+
+function prepareData(): array
 {
 
-    $contactNames = explode(' ', $contact['name'], 3);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['linkData'])) {
+        return json_decode($_POST['linkData'], true);
+    }
+
+    require_once '../data.php';
+    return array_map(fn($value) => json_decode($value, true), getData());
+}
+
+
+function createComplexLeadsArray(array $data): array
+{
+
+
+    // Обязательное условие: наличие контакта в сделке
+    // Все сделки без данных о контакте пропускаются
+    $filteredData = array_filter($data, fn($record) => isset($record['lead'], $record['contact']));
+
+    return array_map(
+        fn($record) => createComplexLeadRequestData($record['lead'], $record['contact']),
+        $filteredData
+    );
+
+}
+
+function createComplexLeadRequestData(array $lead, array $contact): array
+{
+
+    $contactNames = array_values(explode(' ', $contact['name'], 3));
+
     $isFioFormat = count($contactNames) === 3;
-    $contactFirstName = $isFioFormat ? $contactNames[1] : $contactNames[0];
-    $contactLastName = $isFioFormat ? $contactNames[0] : $contactNames[1];
+
+    $contact = [
+        'name' => $contact['name'],
+        'first_name' => $isFioFormat ? $contactNames[1] : $contactNames[0],
+        'last_name' => $isFioFormat ? $contactNames[0] : $contactNames[1],
+    ];
+
+    $company = [
+        'name' => $lead['name'],
+        'custom_fields_values' => [
+            [
+                'field_code' => 'PHONE',
+                'values' => [
+                    [
+                        'value' => $lead['phones'],
+                        'enum_code' => 'WORK'
+                    ],
+                ],
+            ],
+        ],
+    ];
+
 
     return [
         'name' => $lead['name'],
         '_embedded' => [
-            'contacts' => [
-                [
-                    'name' => $contact['name'],
-                    'first_name' => $contactFirstName,
-                    'last_name' => $contactLastName,
-                ],
-            ],
-            'companies' => [
-                [
-                    'name' => $lead['name'],
-                    'custom_fields_values' => [
-                        [
-                            'field_code' => 'PHONE',
-                            'values' => [
-                                [
-                                    'value' => $lead['phones'],
-                                    'enum_code' => 'WORK'
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+            'contacts' => [$contact],
+            'companies' => [$company],
         ],
     ];
 }
@@ -63,17 +92,6 @@ function sendPostRequest(string $url, array $body, array $headers = []): array
     return [$response, $code];
 }
 
-function prepareData(): array
-{
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['linkData'])) {
-        $data = json_decode($_POST['linkData'], true);
-    } else {
-        require_once '../data.php';
-        $data = array_map(fn($value) => json_decode($value, true), getData());
-    }
-    return $data;
-}
 
 function viewOperationResult(int $code): string
 {
@@ -82,28 +100,7 @@ function viewOperationResult(int $code): string
         200 => 'Data successfully sent!',
         401 =>
         'Invalid API auth credentials.',
-        400 => 'Invalid data.'
+        400 => 'Invalid data.',
+        default => 'Unknown error occurred.'
     };
-}
-
-function createComplexLeadsArray(array $data): array
-{
-
-    $complexLeads = [];
-
-    foreach ($data as $record) {
-
-        $lead = $record['lead'];
-        $contact = $record['contact'];
-        $callResult = $record['call_result'];
-
-        // Обязательное условие: наличие контакта в сделке
-        // Все сделки без данных о контакте пропускаются
-        if ($contact === null) {
-            continue;
-        }
-
-        $complexLeads[] = createComplexLeadRequestData($lead, $contact, $callResult);
-    }
-    return $complexLeads;
 }
