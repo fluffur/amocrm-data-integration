@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 require_once '../configs/config.php';
 
-main();
-exit;
-
-
 function main(): void
 {
     $data = prepareData();
@@ -107,7 +103,7 @@ function viewOperationResult(int $code): string
 {
 
     return match ($code) {
-        200 => 'Data successfully sent!',
+        200 => 'Data was successfully sent!',
         401 =>
         'Invalid API auth credentials.',
         400 => 'Invalid data.',
