@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 function loadEnv(string $dirname): void
 {
     if (!file_exists($dirname . '/.env')) {

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 require_once 'env_load.php';
 
 loadEnv(dirname(__DIR__));
