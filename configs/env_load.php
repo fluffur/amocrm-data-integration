@@ -2,11 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Загружает переменные окружения из `.env` файла.
- *
- * Если файл `.env` отсутсвует в указанной директории, выбрасывает исключение.
- * */
 function loadEnv(string $dirname): void
 {
     if (!file_exists($dirname . '/.env')) {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once 'env_loader.php';
+require_once 'env_load.php';
 
 loadEnv(dirname(__DIR__));
 
@@ -19,4 +19,4 @@ const AMOCRM_HEADERS = [
     'Authorization: Bearer ' . ACCESS_TOKEN
 ];
 const BASE_URI = 'https://' . SUBDOMAIN . '.amocrm.ru/';
-const API_V4_URI = BASE_URI . '/api/v4';
+const AMOCRM_API_URI = BASE_URI . '/api/v4';
