@@ -3,18 +3,21 @@
 require_once '../configs/config.php';
 require_once '../data.php';
 
+sendPostRequest(AMOCRM_API_URI . '/leads/custom_fields', getCustomFields());
+
 $data = array_map(fn($value) => json_decode($value, true), getRawData());
-sendRequest(AMOCRM_API_URI . '/leads/custom_fields', 'POST', getCustomFields());
+
 $leads = array_map('createComplexLead', $data);
-$response = sendRequest(AMOCRM_API_URI . '/leads/complex', 'POST', $leads);
-var_dump($response);
 
-exit;
+$response = sendPostRequest(AMOCRM_API_URI . '/leads/complex', $leads);
 
-function sendRequest(string $uri, string $method, array $body = [], array $headers = AMOCRM_HEADERS)
+echo $response['status'] . ' ' . $response['detail'];
+
+
+function sendPostRequest(string $uri, array $body = [], array $headers = AMOCRM_HEADERS)
 {
     $ch = curl_init($uri);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+    curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
