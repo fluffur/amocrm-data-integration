@@ -3,24 +3,24 @@
 require_once '../configs/config.php';
 require_once '../data.php';
 
-sendPostRequest(AMOCRM_API_URI . '/leads/custom_fields', getCustomFields());
+sendPostRequestToAmoCRM('/leads/custom_fields', getCustomFields());
 
 $data = array_map(fn($value) => json_decode($value, true), getRawData());
 
 $leads = array_map('createComplexLead', $data);
 
-$response = sendPostRequest(AMOCRM_API_URI . '/leads/complex', $leads);
+$response = sendPostRequestToAmoCRM('/leads/complex', $leads);
 
 echo $response['status'] ?? '200' . ' ' . $response['detail'] ?? 'Request have sent successfully';
 
 
-function sendPostRequest(string $uri, array $body = [], array $headers = AMOCRM_HEADERS)
+function sendPostRequestToAmoCRM(string $uri, array $body = [])
 {
-    $ch = curl_init($uri);
+    $ch = curl_init(AMOCRM_API_URI . $uri);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, AMOCRM_HEADERS);
     $response = curl_exec($ch);
     curl_close($ch);
     return $response ? json_decode($response, true) : $response;
