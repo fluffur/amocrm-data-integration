@@ -3,20 +3,15 @@
 require_once '../configs/config.php';
 require_once '../data.php';
 
-$data = array_map(fn($value) => json_decode($value, true), getData());
-
-sendCustomFields();
-
+$data = array_map(fn($value) => json_decode($value, true), getRawData());
+sendRequest(AMOCRM_API_URI . '/leads/custom_fields', 'POST', getCustomFields());
 $leads = array_map('createComplexLead', $data);
+$response = sendRequest(AMOCRM_API_URI . '/leads/complex', 'POST', $leads);
+var_dump($response);
 
-$response = sendRequest(AMOCRM_API_URI . '/leads/complex', 'POST', AMOCRM_HEADERS, $leads);
-
-if ($response) {
-    echo 'Data has sent successfully';
-}
 exit;
 
-function sendRequest(string $uri, string $method, array $headers = [], array $body = [])
+function sendRequest(string $uri, string $method, array $body = [], array $headers = AMOCRM_HEADERS)
 {
     $ch = curl_init($uri);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -32,73 +27,62 @@ function createComplexLead(array $record): array
 {
 
     $lead = $record['lead'];
-    $phone = $lead['phones'];
-
     $contact = $record['contact'] ?? null;
-    $companyName = $lead['name'];
 
-    if ($contact === null) {
-        $companyName = '';
-        $contactName = $lead['name'];
-    } else {
-        $contactName = $contact['name'];
-    }
-    $names = explode(" ", $contactName, 3);
+    $contactName = $contact['name'] ?? $lead['name'];
+    $companyName = $contact ? $lead['name'] : '';
+    $contactShortName = getContactShortName($contactName);
 
-    $contactShortName = count($names) === 3 ? $names[1] : $names[0];
 
     return [
-        'custom_fields_values' => [
-            [
-                'field_code' => 'NAME',
-                'values' => [
-                    ['value' => $contactShortName],
-                ],
-            ],
-            [
-                'field_code' => 'COMPANY_NAME',
-                'values' => [
-                    ['value' => $companyName],
-                ],
-            ],
-        ],
+        'custom_fields_values' => createCustomFieldsValues($contactShortName, $companyName),
         'name' => $contactName,
         '_embedded' => [
             'contacts' => [
-                [
-                    'custom_fields_values' => [
-                        [
-                            'field_code' => 'PHONE',
-                            'values' => [
-                                [
-                                    'enum_code' => 'WORK',
-                                    'value' => $phone,
-                                ],
-                            ],
+                createContact($lead['phones']),
+            ],
+        ],
+    ];
+}
 
-                        ],
+function createCustomFieldsValues(string $contactShortName, $companyName): array
+{
+    return [
+        [
+            'field_code' => 'NAME',
+            'values' => [
+                ['value' => $contactShortName],
+            ],
+        ],
+        [
+            'field_code' => 'COMPANY_NAME',
+            'values' => [
+                ['value' => $companyName],
+            ],
+        ],
+    ];
+}
+
+function getContactShortName(string $contactName): string
+{
+    $names = explode(' ', $contactName, 3);
+    return count($names) === 3 ? $names[1] : $names[0];
+}
+
+function createContact(string $phone): array
+{
+    return [
+        'custom_fields_values' => [
+            [
+                'field_code' => 'PHONE',
+                'values' => [
+                    [
+                        'enum_code' => 'WORK',
+                        'value' => $phone,
                     ],
                 ],
 
             ],
         ],
     ];
-}
-
-function sendCustomFields(): void
-{
-    $customFields = [
-        [
-            'name' => 'Имя',
-            'code' => 'NAME',
-            'type' => 'text'
-        ],
-        [
-            'name' => 'Название Компании',
-            'code' => 'COMPANY_NAME',
-            'type' => 'text'
-        ]
-    ];
-
-    sendRequest(AMOCRM_API_URI . '/leads/custom_fields', 'POST', AMOCRM_HEADERS, $customFields);
 }

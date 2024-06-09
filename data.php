@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-function getData(): array
+function getRawData(): array
 {
     return [
         '{"type":"call_result","lead":{"id":50533092696,"name":"ООО Ромашка","comment":"","post":null,"city":"Москва","business":"","homepage":null,"emails":[],"inn":"7736265457","kpp":null,"parent_lead_id":null,"tags":[],"address":null,"external_id":null,"custom_fields":{"FIELD_50000005819":null},"created_at":"2024-05-24T01:20:22.000+03:00","updated_at":"2024-05-24T02:00:18.000+03:00","deleted_at":null,"lead_phones":[],"phones":"+79999999999","responsible_id":120408,"search_data":"42516|ООО РОМАШКА|+79999999999|МОСКВА|Г. МОСКВА И МОСКОВСКАЯ ОБЛАСТЬ|7736265457|ВАСИЛЬКОВ ВАСИЛИЙ ВАСИЛЬЕВИЧ|+79999999999|89999999999|МОСКВА|Г. МОСКВА И МОСКОВСКАЯ ОБЛАСТЬ|+7 (999) 999-99-99","last_call_date":null},"contact":{"id":50533092697,"name":"Васильков Василий Васильевич","comment":"","post":"","city":"Москва","business":null,"homepage":"","emails":[],"inn":null,"kpp":null,"parent_lead_id":50533092696,"tags":[],"address":null,"external_id":null,"custom_fields":{"FIELD_50000004608":[50000000736,50000000737],"FIELD_50000004612":50000000790,"FIELD_50000008896":null},"created_at":"2024-05-24T01:20:22.000+03:00","updated_at":"2024-05-24T02:00:20.955+03:00","deleted_at":null,"lead_phones":["+7 (999) 999-99-99"],"phones":"+79999999999","responsible_id":120408,"search_data":null,"last_call_date":null},"call":{"id":50787206122,"phone":"+79999999999","source":"+79250550694","direction":"out","params":{},"lead_id":50533092697,"organization_id":50533092696,"user_id":120408,"connected_at":null,"ended_at":"2024-05-24T02:00:18.000+03:00","reason":"","duration":0,"scenario_id":50000006506,"result_id":50000100458,"incoming_phone":null,"external_access_id":null,"recording_url":null,"call_type":"outgoing","region":"г. Москва и Московская область","local_time":"02:00","amocrm_associations":[],"amocrm_entity_id":null,"amocrm_entity_type":null,"call_project_id":null,"call_project_title":null,"scenario_result_group_id":50000009871,"scenario_result_group_title":"Успешные"},"call_result":{"result_id":50000100458,"result_name":"Лид","comment":"Тест 4"}}',
@@ -10,4 +10,20 @@ function getData(): array
         '{"type":"call_result","lead":{"id":50430648585,"name":"Денис Петрович","comment":null,"post":"","city":"","business":null,"homepage":"","emails":[],"inn":null,"kpp":null,"parent_lead_id":null,"tags":[],"address":"","external_id":"908167403","custom_fields":{"":null,"FIELD_50000007592":null,"FIELD_50000007593":[50000001811],"FIELD_50000007594":null,"FIELD_50000007635":null,"FIELD_50000007636":50000001826,"FIELD_50000007637":null},"created_at":"2023-12-02T12:17:23.049+03:00","updated_at":"2023-12-21T21:17:54.000+03:00","deleted_at":null,"phones":"+79064408676","responsible_id":182978,"search_data":"51421|ДЕНИС ПЕТРОВИЧ|+79064408676|89064408676|+7 (906) 440-86-76","last_call_date":"2023-12-21T21:17:54.000+03:00"},"contact":null,"call":{"id":50629930452,"phone":"+79064408676","source":"user_64d22fafdf3ee2cc362b30c9","direction":"out","params":{},"lead_id":50430648585,"organization_id":50430648585,"user_id":179916,"connected_at":null,"ended_at":"2023-12-21T21:17:54.000+03:00","reason":"487 Request Cancelled","duration":0,"scenario_id":50000013363,"result_id":50000237106,"incoming_phone":null,"external_access_id":null,"recording_url":null,"call_type":"outgoing","region":"Ставропольский край","local_time":"21:17","amocrm_associations":[],"amocrm_entity_id":null,"amocrm_entity_type":null,"call_project_id":null,"call_project_title":null,"scenario_result_group_id":50000018310,"scenario_result_group_title":"Успешные"},"call_result":{"result_id":50000237106,"result_name":"Лид","comment":"Тест 3"}}'
     ];
 
+}
+
+function getCustomFields(): array
+{
+    return [
+        [
+            'name' => 'Имя',
+            'code' => 'NAME',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'Название Компании',
+            'code' => 'COMPANY_NAME',
+            'type' => 'text'
+        ]
+    ];
 }
