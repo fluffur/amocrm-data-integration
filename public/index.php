@@ -11,7 +11,9 @@ $leads = array_map('createComplexLead', $data);
 
 $response = sendPostRequestToAmoCRM('/leads/complex', $leads);
 
-echo $response['status'] ?? '200' . ' ' . $response['detail'] ?? 'Request have sent successfully';
+$status = $response['status'] ?? '200';
+$detail = $response['detail'] ?? 'Request have sent successfully';
+echo $status . ' ' . $detail;
 
 
 function sendPostRequestToAmoCRM(string $uri, array $body = [])
