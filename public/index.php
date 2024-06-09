@@ -11,7 +11,7 @@ $leads = array_map('createComplexLead', $data);
 
 $response = sendPostRequest(AMOCRM_API_URI . '/leads/complex', $leads);
 
-echo $response['status'] . ' ' . $response['detail'];
+echo $response['status'] ?? '200' . ' ' . $response['detail'] ?? 'OK';
 
 
 function sendPostRequest(string $uri, array $body = [], array $headers = AMOCRM_HEADERS)
