@@ -80,8 +80,8 @@ function createContact(string $phone): array
                 'field_code' => 'PHONE',
                 'values' => [
                     [
-                        'enum_code' => 'WORK',
                         'value' => $phone,
+                        'enum_code' => 'WORK',
                     ],
                 ],
 
