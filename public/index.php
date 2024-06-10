@@ -7,7 +7,6 @@ require_once '../app/lead_processing.php';
 sendPostRequestToAmoCRM('/leads/custom_fields', getCustomFields());
 
 $data = array_map(fn($value) => json_decode($value, true), getRawData());
-
 $leads = array_map('createComplexLead', $data);
 
 $response = sendPostRequestToAmoCRM('/leads/complex', $leads);
