@@ -18,7 +18,7 @@ function createComplexLead(array $record): array
         'name' => $contactName,
         '_embedded' => [
             'contacts' => [
-                createContact($lead['phones']),
+                createContact($contact['phones'] ?? $lead['phones']),
             ],
         ],
     ];
