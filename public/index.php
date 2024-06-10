@@ -2,6 +2,7 @@
 
 require_once '../configs/config.php';
 require_once '../data.php';
+require_once '../app/lead_processing.php';
 
 sendPostRequestToAmoCRM('/leads/custom_fields', getCustomFields());
 
@@ -13,81 +14,5 @@ $response = sendPostRequestToAmoCRM('/leads/complex', $leads);
 
 $status = $response['status'] ?? '200';
 $detail = $response['detail'] ?? 'Request have sent successfully';
+
 echo $status . ' ' . $detail;
-
-
-function sendPostRequestToAmoCRM(string $uri, array $body = [])
-{
-    $ch = curl_init(AMOCRM_API_URI . $uri);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, AMOCRM_HEADERS);
-    $response = curl_exec($ch);
-    curl_close($ch);
-    return $response ? json_decode($response, true) : $response;
-}
-
-function createComplexLead(array $record): array
-{
-
-    $lead = $record['lead'];
-    $contact = $record['contact'] ?? null;
-
-    $contactName = $contact['name'] ?? $lead['name'];
-    $companyName = $contact ? $lead['name'] : '';
-    $contactShortName = getContactShortName($contactName);
-
-
-    return [
-        'custom_fields_values' => createCustomFieldsValues($contactShortName, $companyName),
-        'name' => $contactName,
-        '_embedded' => [
-            'contacts' => [
-                createContact($lead['phones']),
-            ],
-        ],
-    ];
-}
-
-function createCustomFieldsValues(string $contactShortName, $companyName): array
-{
-    return [
-        [
-            'field_code' => 'NAME',
-            'values' => [
-                ['value' => $contactShortName],
-            ],
-        ],
-        [
-            'field_code' => 'COMPANY_NAME',
-            'values' => [
-                ['value' => $companyName],
-            ],
-        ],
-    ];
-}
-
-function getContactShortName(string $contactName): string
-{
-    $names = explode(' ', $contactName, 3);
-    return count($names) === 3 ? $names[1] : $names[0];
-}
-
-function createContact(string $phone): array
-{
-    return [
-        'custom_fields_values' => [
-            [
-                'field_code' => 'PHONE',
-                'values' => [
-                    [
-                        'value' => $phone,
-                        'enum_code' => 'WORK',
-                    ],
-                ],
-
-            ],
-        ],
-    ];
-}
