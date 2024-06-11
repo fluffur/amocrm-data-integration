@@ -5,7 +5,7 @@ require_once '../data.php';
 
 $data = array_map(fn($value) => json_decode($value, true), getData());
 
-sendCustomFields();
+sendRequest(AMOCRM_API_URI . '/leads/custom_fields', 'POST', AMOCRM_HEADERS, getCustomFields());
 
 $leads = array_map('createComplexLead', $data);
 
@@ -84,20 +84,3 @@ function createComplexLead(array $record): array
     ];
 }
 
-function sendCustomFields(): void
-{
-    $customFields = [
-        [
-            'name' => 'Имя',
-            'code' => 'NAME',
-            'type' => 'text'
-        ],
-        [
-            'name' => 'Название Компании',
-            'code' => 'COMPANY_NAME',
-            'type' => 'text'
-        ]
-    ];
-
-    sendRequest(AMOCRM_API_URI . '/leads/custom_fields', 'POST', AMOCRM_HEADERS, $customFields);
-}

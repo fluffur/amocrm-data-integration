@@ -11,3 +11,19 @@ function getData(): array
     ];
 
 }
+function getCustomFields(): array
+{
+    return [
+        [
+            'name' => 'Имя',
+            'code' => 'NAME',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'Название Компании',
+            'code' => 'COMPANY_NAME',
+            'type' => 'text'
+        ]
+    ];
+
+}
