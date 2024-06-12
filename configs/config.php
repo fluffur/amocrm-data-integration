@@ -4,10 +4,5 @@ require_once 'env_load.php';
 
 loadEnv(dirname(__DIR__));
 
-function getEnvValue($key, $default = null)
-{
-    return $_ENV[$key] ?? $default;
-}
-
-define("AMOCRM_HEADERS", ['Content-Type: application/json', 'Authorization: Bearer ' . getEnvValue('ACCESS_TOKEN')]);
-define("AMOCRM_API_URI", 'https://' . getEnvValue('AMOCRM_SUBDOMAIN') . '.amocrm.ru/api/v4');
+define("AMOCRM_HEADERS", ['Content-Type: application/json', 'Authorization: Bearer ' . $_ENV['ACCESS_TOKEN']]);
+define("AMOCRM_API_URI", 'https://' . $_ENV['AMOCRM_SUBDOMAIN'] . '.amocrm.ru/api/v4');
