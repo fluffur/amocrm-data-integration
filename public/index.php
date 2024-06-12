@@ -1,8 +1,8 @@
 <?php
 
-require_once '../configs/config.php';
-require_once '../data.php';
-require_once '../app/lead_processing.php';
+require_once __DIR__ . '/../configs/config.php';
+require_once __DIR__ . '/../data.php';
+require_once __DIR__ . '/../app/lead_processing.php';
 
 sendRequestToAmoCRM('/leads/custom_fields', 'POST', getCustomFields());
 

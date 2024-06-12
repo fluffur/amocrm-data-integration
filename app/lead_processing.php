@@ -1,6 +1,6 @@
 <?php
 
-require_once 'amoCRM_client.php';
+require_once __DIR__ . '/amoCRM_client.php';
 
 function createComplexLead(array $record): array
 {
