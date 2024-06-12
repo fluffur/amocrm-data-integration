@@ -7,7 +7,7 @@ $data = array_map(fn($value) => json_decode($value, true), getData());
 
 sendRequest(AMOCRM_API_URI . '/leads/custom_fields', 'POST', AMOCRM_HEADERS, getCustomFields());
 
-$leads = array_map('createComplexLead', $data);
+$leads = array_map('createComplexLeadQuery', $data);
 
 $response = sendRequest(AMOCRM_API_URI . '/leads/complex', 'POST', AMOCRM_HEADERS, $leads);
 
@@ -27,7 +27,7 @@ function sendRequest(string $uri, string $method, array $headers = [], array $bo
     return $response ? json_decode($response, true) : $response;
 }
 
-function createComplexLead(array $record): array
+function createComplexLeadQuery(array $record): array
 {
 
     $lead = $record['lead'];
